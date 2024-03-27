@@ -1,7 +1,6 @@
 use std::{
     io::{Read, Write},
     net::{TcpListener, TcpStream},
-    ptr::write_bytes,
 };
 
 fn main() {
