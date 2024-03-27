@@ -31,6 +31,7 @@ pub fn handle_conn(mut stream: TcpStream) {
         if bytes_read == 0 {
             return;
         }
+
         stream.write_all(b"+PONG\r\n").unwrap();
     }
 }
