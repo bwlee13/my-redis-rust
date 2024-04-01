@@ -23,6 +23,7 @@ pub enum Value {
     SimpleString(String),
     BulkString(String),
     Array(Vec<Value>),
+    NullBulkString,
 }
 
 impl Value {
@@ -30,6 +31,7 @@ impl Value {
         match self {
             Value::SimpleString(s) => format!("+{}\r\n", s),
             Value::BulkString(s) => format!("${}\r\n{}\r\n", s.len(), s),
+            Value::NullBulkString => "$-1\r\n".to_string(),
             _ => panic!("Unsupported value for serialize"),
         }
     }
@@ -40,7 +42,6 @@ pub struct RedisHandler {
     buffer: BytesMut,
 }
 
-// impl -> "implement" the struct...
 impl RedisHandler {
     pub fn new(stream: TcpStream) -> Self {
         RedisHandler {
