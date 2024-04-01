@@ -18,6 +18,20 @@ use tokio::{
 // *2\r\n$5\r\nhello\r\n$5\r\nworld\r\n
 // ["hello", "world"]
 
+pub struct Config {
+    pub host: String,
+    pub port: String,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            host: String::from("127.0.0.1"),
+            port: String::from("6379"),
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub enum Value {
     SimpleString(String),

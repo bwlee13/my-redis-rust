@@ -4,7 +4,7 @@ mod server;
 use anyhow::bail;
 use anyhow::Result;
 use redis::RedisHandler;
-use redis::Value;
+use redis::{Config, Value};
 use server::Server;
 use std::net::SocketAddr;
 use tokio::net::{TcpListener, TcpStream};
@@ -13,7 +13,17 @@ use tokio::net::{TcpListener, TcpStream};
 async fn main() -> anyhow::Result<()> {
     println!("Starting TCP Listener...");
 
-    let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
+    let mut config = Config::default();
+    let mut args = std::env::args();
+    while let Some(arg) = args.next() {
+        if arg.as_str() == "--port" {
+            config.port = args.next().expect("missing port argument");
+        }
+    }
+
+    let listener = TcpListener::bind(format!("{}:{}", config.host, config.port))
+        .await
+        .unwrap();
     let server = Server::new();
 
     loop {
